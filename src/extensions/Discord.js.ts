@@ -1,8 +1,8 @@
 import { Client, Guild, StreamDispatcher } from 'discord.js';
 
-import { IService } from '../interfaces/IService';
-import Playlist from '../Playlist';
-import Song from '../Song';
+import { IService } from '../core/interfaces/IService';
+import Playlist from '../core/Playlist';
+import Song from '../core/Song';
 
 export type StopReason = 'temp' | 'terminal';
 
