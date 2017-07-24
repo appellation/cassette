@@ -1,4 +1,4 @@
-import Song from '../Song';
+import Song from '../core/Song';
 import { IFetchable } from './IFetchable';
 
 export interface IService {

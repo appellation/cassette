@@ -1,5 +1,5 @@
 import { Readable as ReadableStream } from 'stream';
-import { IService } from './interfaces/IService';
+import { IService } from '../interfaces/IService';
 
 export default abstract class Song {
   public readonly service: IService;

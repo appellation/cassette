@@ -1,19 +1,22 @@
 import { knuthShuffle } from 'knuth-shuffle';
 
-import { IService } from './interfaces/IService';
+import { IService } from '../interfaces/IService';
+import Client from './Client';
 import Song from './Song';
 
-export default class Playlist {
-  public services: IService[];
+export default abstract class Playlist extends NodeJS.EventEmitter {
+  public client: Client;
+
   public songs: Song[] = [];
   public loop: boolean = false;
   public autoplay: boolean = false;
-  public playing: boolean = false;
 
   protected _pos: number = 0;
+  protected _playing: boolean = false;
 
-  constructor(services: IService[]) {
-    this.services = services;
+  constructor(client: Client) {
+    super();
+    this.client = client;
   }
 
   get length() {
@@ -28,9 +31,14 @@ export default class Playlist {
     return this.songs[this._pos];
   }
 
+  get playing() {
+    return this._playing;
+  }
+
   public reset() {
     this.songs = [];
     this._pos = 0;
+    this.emit('reset');
   }
 
   public hasPrev() {
@@ -40,11 +48,13 @@ export default class Playlist {
   public prev() {
     if (this.hasPrev()) {
       this._pos -= 1;
+      this.emit('prev');
       return true;
     }
 
     if (this.loop) {
       this._pos = this.songs.length - 1;
+      this.emit('prev');
       return true;
     }
 
@@ -58,11 +68,13 @@ export default class Playlist {
   public async next() {
     if (this.hasNext()) {
       this._pos += 1;
+      this.emit('next');
       return true;
     }
 
     if (this.loop) {
       this._pos = 0;
+      this.emit('next');
       return true;
     }
 
@@ -71,6 +83,7 @@ export default class Playlist {
       if (next) {
         this.songs.push(next);
         this._pos += 1;
+        this.emit('next');
         return true;
       }
     }
@@ -81,18 +94,26 @@ export default class Playlist {
   public shuffle() {
     this.songs = knuthShuffle(this.songs);
     this._pos = 0;
+    this.emit('shuffle');
   }
 
   public async add(content: string, position = Infinity) {
     const added: Song[] = [];
     const words = content.split(' ');
 
-    for (const service of this.services) {
+    for (const service of this.client.services) {
       const fetchable = service.fetchable(content);
       added.push(...(await service.fetch(fetchable)));
     }
 
     this.songs.splice(position, 0, ...added);
+    this.emit('add', added);
     return added;
   }
+
+  public abstract stop(reason?: string): void;
+  public abstract start(...args: any[]): Promise<void>;
+  public abstract pause(): void;
+  public abstract resume(): void;
+  public abstract destroy(): void;
 }

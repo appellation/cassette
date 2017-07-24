@@ -1,8 +1,8 @@
 import API = require('simple-youtube-api');
 import ytdl = require('ytdl-core');
 
-import { IFetchable } from '../interfaces/IFetchable';
-import { IService } from '../interfaces/IService';
+import { IFetchable } from '../../interfaces/IFetchable';
+import { IService } from '../../interfaces/IService';
 import YouTubeSong from '../songs/YouTube';
 
 export default class YouTubeService implements IService {
@@ -18,17 +18,17 @@ export default class YouTubeService implements IService {
 
     for (const playlist of fetchable.playlists) {
       const p = await this.api.getPlaylist(playlist);
-      fetched.push(...p.videos.map((v) => this.formatSong(v, playlist)));
+      fetched.push(...p.videos.map((v) => this.makeSong(v, playlist)));
     }
 
     for (const song of fetchable.songs) {
-      fetched.push(this.formatSong(await this.api.getVideo(song)));
+      fetched.push(this.makeSong(await this.api.getVideo(song)));
     }
 
     if (this.search) {
       for (const query of fetchable.queries) {
         const results = await this.api.searchVideos(query, 1);
-        if (results.length) fetched.push(this.formatSong(results[0]));
+        if (results.length) fetched.push(this.makeSong(results[0]));
       }
     }
 
@@ -38,7 +38,7 @@ export default class YouTubeService implements IService {
   public fetchable(content: string) {
     const words = content.split(' ');
     const query = [];
-    const addable: IFetchable = {
+    const fetchable: IFetchable = {
       playlists: [],
       queries: [],
       songs: [],
@@ -49,18 +49,18 @@ export default class YouTubeService implements IService {
       if (!parsed) {
         query.push(elem);
       } else if (parsed.type === 'video') {
-        addable.songs.push(parsed.id);
+        fetchable.songs.push(parsed.id);
       } else if (parsed.type === 'playlist') {
-        addable.playlists.push(parsed.id);
+        fetchable.playlists.push(parsed.id);
       }
     }
 
-    addable.queries.push(query.join(' '));
+    fetchable.queries.push(query.join(' '));
 
-    return addable;
+    return fetchable;
   }
 
-  public formatSong(video: API.Video, playlistID?: string): YouTubeSong {
+  public makeSong(video: API.Video, playlistID?: string): YouTubeSong {
     return new YouTubeSong(this, {
       playlistID,
       title: video.title,
