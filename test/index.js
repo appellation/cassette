@@ -23,9 +23,9 @@ test.serial('create playlist', t => {
   return t.pass();
 });
 
-test.serial('add to playlist', async t => {
-  await playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A');
-  return t.is(129, playlist.length);
+test.serial('add to playlist', t => {
+  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A')
+    .then(() => t.is(129, playlist.length));
 });
 
 test.serial('shuffles', t => {
@@ -36,13 +36,15 @@ test.serial('shuffles', t => {
   return t.not(before, playlist.songs);
 });
 
-test.serial('advances', async t => {
+test.serial('advances', t => {
   const before = playlist.pos;
   const song = playlist.current;
 
-  t.true(await playlist.next());
-  t.deepEqual(playlist.songs[before], song);
-  return t.is(before + 1, playlist.pos);
+  return playlist.next().then(r => {
+    t.true(r);
+    t.deepEqual(playlist.songs[before], song);
+    return t.is(before + 1, playlist.pos);
+  });
 });
 
 test.serial('reverses', t => {

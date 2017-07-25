@@ -62,13 +62,11 @@ export default class Playlist extends EventEmitter {
   }
 
   public async next() {
-    // console.log(this.current && this.current.loop);
     if (this.current && this.current.loop) {
       this.emit('next');
       return true;
     }
 
-    // console.log(this.hasNext());
     if (this.hasNext()) {
       this._pos += 1;
       this.emit('next');
