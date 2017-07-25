@@ -55,3 +55,9 @@ test.serial('reverses', t => {
   t.deepEqual(playlist.songs[playlist.pos + 1], song);
   return t.is(before - 1, playlist.pos);
 });
+
+test.serial('resets', t => {
+  playlist.reset();
+  t.is(0, playlist.songs.length);
+  return t.is(0, playlist.pos);
+});
