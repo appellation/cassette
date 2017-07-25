@@ -8,7 +8,7 @@ import Song from './core/Song';
 import YouTubeService from './core/services/YouTube';
 import YouTubeSong from './core/songs/YouTube';
 
-import DiscordPlaylist from './extensions/Discord.js';
+import DiscordPlaylist from './players/Discord.js';
 
 export {
   Client,

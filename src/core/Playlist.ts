@@ -13,7 +13,6 @@ export default class Playlist extends EventEmitter {
   public autoplay: boolean = false;
 
   protected _pos: number = 0;
-  protected _playing: boolean = false;
 
   constructor(client: Client) {
     super();
@@ -25,15 +24,11 @@ export default class Playlist extends EventEmitter {
   }
 
   get pos() {
-    return this._pos + 1;
+    return this._pos;
   }
 
   get current() {
     return this.songs[this._pos];
-  }
-
-  get playing() {
-    return this._playing;
   }
 
   public reset() {
@@ -67,6 +62,13 @@ export default class Playlist extends EventEmitter {
   }
 
   public async next() {
+    // console.log(this.current && this.current.loop);
+    if (this.current && this.current.loop) {
+      this.emit('next');
+      return true;
+    }
+
+    // console.log(this.hasNext());
     if (this.hasNext()) {
       this._pos += 1;
       this.emit('next');
@@ -80,7 +82,7 @@ export default class Playlist extends EventEmitter {
     }
 
     if (this.autoplay) {
-      const next = await this.current.nextRecommended();
+      const next = await this.current.next();
       if (next) {
         this.songs.push(next);
         this._pos += 1;

@@ -1,14 +1,12 @@
 import { Guild, GuildMember, StreamDispatcher, VoiceConnection } from 'discord.js';
 
 import Client from '../core/Client';
-import Playlist from '../core/Playlist';
+import Playable from '../core/Playable';
 import Song from '../core/Song';
-import { IPlayable } from '../interfaces/IPlayable';
-import { IService } from '../interfaces/IService';
 
 export type StopReason = 'temp' | 'terminal';
 
-export default class DiscordPlaylist extends Playlist implements IPlayable {
+export default class DiscordPlaylist extends Playable {
   public readonly guild: Guild;
 
   constructor(client: Client, guild: Guild) {
@@ -80,10 +78,8 @@ export default class DiscordPlaylist extends Playlist implements IPlayable {
       if (reason === 'temp') return;
       if (reason === 'terminal') return this._destroy();
 
-      if (!this.current.loop) {
-        const next = await this.next();
-        if (!next) return this._destroy();
-      }
+      const next = await this.next();
+      if (!next) return this._destroy();
 
       await this._start();
     });

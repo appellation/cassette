@@ -25,7 +25,7 @@ export default class YouTubeSong extends Song {
     });
   }
 
-  public async nextRecommended() {
+  public async next() {
     return null;
   }
 }

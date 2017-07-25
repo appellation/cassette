@@ -14,6 +14,6 @@ export default abstract class Song {
     this.service = service;
   }
 
-  public abstract nextRecommended(): Promise<Song | null>;
+  public abstract next(): Promise<Song | null>;
   public abstract stream(): Promise<ReadableStream> | ReadableStream;
 }
