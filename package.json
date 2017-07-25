@@ -1,5 +1,5 @@
 {
-  "name": "playlists",
+  "name": "cassette",
   "version": "0.1.0",
   "description": "An extensible playlist system.",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/appellation/playlists.git"
+    "url": "https://github.com/appellation/cassette.git"
   },
   "devDependencies": {
     "@types/node": "^8.0.16",
