@@ -28,8 +28,5 @@
     "knuth-shuffle": "^1.0.1",
     "simple-youtube-api": "github:hypercoder2975/simple-youtube-api#appel-wip",
     "ytdl-core": "^0.14.4"
-  },
-  "optionalDependencies": {
-    "discord.js": "^11.1.0"
   }
 }
