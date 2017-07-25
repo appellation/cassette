@@ -19,7 +19,7 @@ export default class YouTubeSong extends Song {
   }
 
   public stream() {
-    return ytdl(`https://www.youtube.com/watch?${this.trackID}`, {
+    return ytdl(`https://www.youtube.com/watch?v=${this.trackID}`, {
       filter: 'audioonly',
       quality: 'lowest',
     });
