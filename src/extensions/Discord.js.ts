@@ -3,11 +3,12 @@ import { Guild, GuildMember, StreamDispatcher, VoiceConnection } from 'discord.j
 import Client from '../core/Client';
 import Playlist from '../core/Playlist';
 import Song from '../core/Song';
+import { IPlayable } from '../interfaces/IPlayable';
 import { IService } from '../interfaces/IService';
 
 export type StopReason = 'temp' | 'terminal';
 
-export default class DiscordPlaylist extends Playlist {
+export default class DiscordPlaylist extends Playlist implements IPlayable {
   public readonly guild: Guild;
 
   constructor(client: Client, guild: Guild) {

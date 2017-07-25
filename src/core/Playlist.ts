@@ -1,10 +1,11 @@
+import * as EventEmitter from 'events';
 import { knuthShuffle } from 'knuth-shuffle';
 
 import { IService } from '../interfaces/IService';
 import Client from './Client';
 import Song from './Song';
 
-export default abstract class Playlist extends NodeJS.EventEmitter {
+export default class Playlist extends EventEmitter {
   public client: Client;
 
   public songs: Song[] = [];
@@ -99,7 +100,6 @@ export default abstract class Playlist extends NodeJS.EventEmitter {
 
   public async add(content: string, position = Infinity) {
     const added: Song[] = [];
-    const words = content.split(' ');
 
     for (const service of this.client.services) {
       const fetchable = service.fetchable(content);
@@ -110,10 +110,4 @@ export default abstract class Playlist extends NodeJS.EventEmitter {
     this.emit('add', added);
     return added;
   }
-
-  public abstract stop(reason?: string): void;
-  public abstract start(...args: any[]): Promise<void>;
-  public abstract pause(): void;
-  public abstract resume(): void;
-  public abstract destroy(): void;
 }

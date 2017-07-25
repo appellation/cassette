@@ -4,7 +4,9 @@ declare module 'simple-youtube-api' {
     public static util: YouTube.IUtil;
 
     public getVideo(url: string): Promise<YouTube.Video>;
+    public getVideoByID(id: string): Promise<YouTube.Video>;
     public getPlaylist(url: string): Promise<YouTube.Playlist>;
+    public getPlaylistByID(url: string): Promise<YouTube.Playlist>;
     public searchVideos(query: string, limit?: number): Promise<YouTube.Video[]>;
   }
 

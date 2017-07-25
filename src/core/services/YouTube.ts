@@ -17,12 +17,12 @@ export default class YouTubeService implements IService {
     const fetched: YouTubeSong[] = [];
 
     for (const playlist of fetchable.playlists) {
-      const p = await this.api.getPlaylist(playlist);
+      const p = await this.api.getPlaylistByID(playlist);
       fetched.push(...p.videos.map((v) => this.makeSong(v, playlist)));
     }
 
     for (const song of fetchable.songs) {
-      fetched.push(this.makeSong(await this.api.getVideo(song)));
+      fetched.push(this.makeSong(await this.api.getVideoByID(song)));
     }
 
     if (this.search) {
@@ -55,7 +55,8 @@ export default class YouTubeService implements IService {
       }
     }
 
-    fetchable.queries.push(query.join(' '));
+    const joined = query.join(' ');
+    if (joined.length) fetchable.queries.push(joined);
 
     return fetchable;
   }
