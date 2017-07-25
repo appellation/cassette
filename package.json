@@ -8,10 +8,14 @@
     "test": "gulp && ava --fail-fast"
   },
   "typings": "typings/index.d.ts",
-  "author": "",
+  "author": "Will Nelson <nelson.will@live.com>",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appellation/playlists.git"
+  },
   "devDependencies": {
-    "@types/node": "^8.0.14",
+    "@types/node": "^8.0.16",
     "ava": "^0.21.0",
     "del": "^3.0.0",
     "discord.js": "^11.1.0",
@@ -25,5 +29,7 @@
     "simple-youtube-api": "github:hypercoder2975/simple-youtube-api#appel-wip",
     "ytdl-core": "^0.14.4"
   },
-  "optionalDependencies": {}
+  "optionalDependencies": {
+    "discord.js": "^11.1.0"
+  }
 }
