@@ -14,6 +14,10 @@ export default abstract class Song {
     this.service = service;
   }
 
+  public toggleLoop() {
+    return this.loop = !this.loop;
+  }
+
   public abstract next(): Promise<Song | null>;
   public abstract stream(): Promise<ReadableStream> | ReadableStream;
 }
