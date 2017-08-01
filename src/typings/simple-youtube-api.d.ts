@@ -8,6 +8,7 @@ declare module 'simple-youtube-api' {
     public getPlaylist(url: string): Promise<YouTube.Playlist>;
     public getPlaylistByID(url: string): Promise<YouTube.Playlist>;
     public searchVideos(query: string, limit?: number): Promise<YouTube.Video[]>;
+    public searchPlaylists(query: string, limit?: number): Promise<YouTube.Playlist[]>;
   }
 
   namespace YouTube {

@@ -1,9 +1,10 @@
 import API = require('simple-youtube-api');
 import ytdl = require('ytdl-core');
 
+import { SearchType } from '../../core/Playlist';
 import { IFetchable } from '../../interfaces/IFetchable';
 import { IService } from '../../interfaces/IService';
-import YouTubeSong from '../songs/YouTube';
+import YouTubeSong from './Song';
 
 export default class YouTubeService implements IService {
   public readonly api: API;
@@ -13,7 +14,7 @@ export default class YouTubeService implements IService {
     this.api = new API(key);
   }
 
-  public async fetch(fetchable: IFetchable) {
+  public async fetch(fetchable: IFetchable, searchType?: SearchType) {
     const fetched: YouTubeSong[] = [];
 
     for (const playlist of fetchable.playlists) {
@@ -28,8 +29,17 @@ export default class YouTubeService implements IService {
 
     if (this.search) {
       for (const query of fetchable.queries) {
-        const results = await this.api.searchVideos(query, 1);
-        if (results.length) fetched.push(this.makeSong(results[0]));
+        if (searchType === 'playlist') {
+          const results = await this.api.searchPlaylists(query, 1);
+          if (results.length) {
+            const list = results[0];
+            const videos = await list.getVideos();
+            fetched.push(...videos.map((v) => this.makeSong(v, list.id)));
+          }
+        } else {
+          const results = await this.api.searchVideos(query, 1);
+          if (results.length) fetched.push(this.makeSong(results[0]));
+        }
       }
     }
 

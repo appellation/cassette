@@ -28,6 +28,7 @@
     "knuth-shuffle": "^1.0.1"
   },
   "optionalDependencies": {
+    "axios": "^0.16.2",
     "simple-youtube-api": "github:hypercoder2975/simple-youtube-api#appel-wip",
     "ytdl-core": "^0.14.4"
   }

@@ -1,8 +1,8 @@
 import { Readable as ReadableStream } from 'stream';
 import ytdl = require('ytdl-core');
 
-import YouTube from '../services/YouTube';
-import Song from '../Song';
+import Song from '../../core/Song';
+import YouTubeService from './Service';
 
 export default class YouTubeSong extends Song {
   public readonly type: string = 'youtube';
@@ -10,15 +10,7 @@ export default class YouTubeSong extends Song {
   public readonly playlistID?: string;
   public readonly trackID: string;
 
-  constructor(service: YouTube, data: { title: string, playlistID?: string, trackID: string }) {
-    super(service);
-
-    this.title = data.title;
-    this.playlistID = data.playlistID;
-    this.trackID = data.trackID;
-  }
-
-  public stream() {
+  public stream(): ReadableStream {
     return ytdl(`https://www.youtube.com/watch?v=${this.trackID}`, {
       filter: 'audioonly',
       quality: 'lowest',

@@ -1,6 +1,9 @@
 import { Readable as ReadableStream } from 'stream';
 import { IService } from '../interfaces/IService';
 
+// tslint:disable-next-line interface-over-type-literal
+export type SongData = { title: string, playlistID?: string, trackID: string };
+
 export default abstract class Song {
   public readonly service: IService;
 
@@ -10,8 +13,12 @@ export default abstract class Song {
   public abstract readonly trackID: string;
   public abstract readonly playlistID?: string;
 
-  constructor(service: IService) {
+  constructor(service: IService, data: SongData) {
     this.service = service;
+
+    this.title = data.title;
+    this.playlistID = data.playlistID;
+    this.trackID = data.trackID;
   }
 
   public toggleLoop() {

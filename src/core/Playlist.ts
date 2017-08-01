@@ -5,6 +5,8 @@ import { IService } from '../interfaces/IService';
 import Client from './Client';
 import Song from './Song';
 
+export type SearchType = 'song' | 'playlist';
+
 export default class Playlist extends EventEmitter {
   public client: Client;
 
@@ -12,7 +14,7 @@ export default class Playlist extends EventEmitter {
   public loop: boolean = false;
   public autoplay: boolean = false;
 
-  protected _pos: number = 0;
+  private _pos: number = 0;
 
   constructor(client: Client) {
     super();
@@ -62,21 +64,21 @@ export default class Playlist extends EventEmitter {
   }
 
   public async next() {
-    if (this.current && this.current.loop) {
+    const complete = () => {
       this.emit('next');
       return true;
-    }
+    };
+
+    if (this.current && this.current.loop) return complete();
 
     if (this.hasNext()) {
       this._pos += 1;
-      this.emit('next');
-      return true;
+      return complete();
     }
 
     if (this.loop) {
       this._pos = 0;
-      this.emit('next');
-      return true;
+      return complete();
     }
 
     if (this.autoplay) {
@@ -84,8 +86,7 @@ export default class Playlist extends EventEmitter {
       if (next) {
         this.songs.push(next);
         this._pos += 1;
-        this.emit('next');
-        return true;
+        return complete();
       }
     }
 
@@ -98,12 +99,15 @@ export default class Playlist extends EventEmitter {
     this.emit('shuffle');
   }
 
-  public async add(content: string, position = Infinity) {
+  public async add(content: string, {
+    position = Infinity,
+    searchType = 'song',
+  }: { position?: number, searchType?: SearchType } = {}) {
     const added: Song[] = [];
 
     for (const service of this.client.services) {
       const fetchable = service.fetchable(content);
-      added.push(...(await service.fetch(fetchable)));
+      added.push(...(await service.fetch(fetchable, searchType)));
     }
 
     this.songs.splice(position, 0, ...added);
