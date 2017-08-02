@@ -20,11 +20,11 @@ export default class YouTubeService implements IService {
     for (const playlist of fetchable.playlists) {
       const p = await this.api.getPlaylistByID(playlist);
       await p.getVideos();
-      fetched.push(...p.videos.map((v) => this.makeSong(v, playlist)));
+      fetched.push(...p.videos.map((v) => new YouTubeSong(this, v, playlist)));
     }
 
     for (const song of fetchable.songs) {
-      fetched.push(this.makeSong(await this.api.getVideoByID(song)));
+      fetched.push(new YouTubeSong(this, await this.api.getVideoByID(song)));
     }
 
     if (this.search) {
@@ -34,11 +34,11 @@ export default class YouTubeService implements IService {
           if (results.length) {
             const list = results[0];
             const videos = await list.getVideos();
-            fetched.push(...videos.map((v) => this.makeSong(v, list.id)));
+            fetched.push(...videos.map((v) => new YouTubeSong(this, v, list.id)));
           }
         } else {
           const results = await this.api.searchVideos(query, 1);
-          if (results.length) fetched.push(this.makeSong(results[0]));
+          if (results.length) fetched.push(new YouTubeSong(this, results[0]));
         }
       }
     }
@@ -70,13 +70,5 @@ export default class YouTubeService implements IService {
     if (joined.length) fetchable.queries.push(joined);
 
     return fetchable;
-  }
-
-  public makeSong(video: API.Video, playlistID?: string): YouTubeSong {
-    return new YouTubeSong(this, {
-      playlistID,
-      title: video.title,
-      trackID: video.id,
-    });
   }
 }

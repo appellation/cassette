@@ -9,7 +9,10 @@ let playlist;
 let services;
 
 test.serial('create services', t => {
-  services = [new playlists.YouTubeService(process.env.GOOGLE_API_KEY)];
+  services = [
+    new playlists.YouTubeService(process.env.GOOGLE_API_KEY),
+    new playlists.SoundcloudService(process.env.SOUNDCLOUD_API_KEY)
+  ];
   return t.pass();
 });
 
@@ -24,8 +27,8 @@ test.serial('create playlist', t => {
 });
 
 test.serial('add to playlist', t => {
-  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A')
-    .then(() => t.is(129, playlist.length));
+  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A https://soundcloud.com/tom-stetson-905539972/sets/the-chill-pill')
+    .then(() => t.true(playlist.length > 200));
 });
 
 test.serial('shuffles', t => {
