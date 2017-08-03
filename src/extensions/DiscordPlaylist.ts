@@ -1,13 +1,12 @@
 import { Guild, StreamDispatcher, VoiceChannel, VoiceConnection } from 'discord.js';
 
 import Client from '../core/Client';
-import Playable from '../core/Playable';
 import Playlist from '../core/Playlist';
 import Song from '../core/Song';
 
 export type EndReason = 'temp' | 'terminal';
 
-export default class DiscordPlaylist extends Playable {
+export default class DiscordPlaylist extends Playlist {
   public static get(client: Client, guild: Guild): Playlist {
     const existing = client.playlists.get(guild.id);
     if (existing) return existing;
@@ -27,6 +26,7 @@ export default class DiscordPlaylist extends Playable {
   }
 
   public readonly guild: Guild;
+  private _playing: boolean;
 
   constructor(client: Client, guild: Guild) {
     super(client);
@@ -37,15 +37,12 @@ export default class DiscordPlaylist extends Playable {
     return this.guild.voiceConnection ? this.guild.voiceConnection.dispatcher : null;
   }
 
-  public stop() {
-    return this.end('temp');
+  get playing() {
+    return this._playing;
   }
 
-  public end(reason: EndReason = 'terminal') {
-    if (this._dispatcher) {
-      this._dispatcher.end(reason);
-      this.emit('end', reason);
-    }
+  public stop() {
+    return this.end('temp');
   }
 
   public destroy() {
@@ -92,6 +89,13 @@ export default class DiscordPlaylist extends Playable {
 
       await this._start();
     });
+  }
+
+  private end(reason: EndReason = 'terminal') {
+    if (this._dispatcher) {
+      this._dispatcher.end(reason);
+      this.emit('end', reason);
+    }
   }
 
   private _destroy() {
