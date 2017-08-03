@@ -23,7 +23,7 @@ const ytService = new cassette.YouTubeService('your api key');
 const client = new cassette.Client([ytService]);
 ```
 
-3. Make playlists. At its most basic level, cassette ships with a fully functional playlist (that is the entire point of this module, after all).  However, actually transmitting audio from that playlist is very implementation-specific; as such, you're welcome to extend the cassette playlist to make your own fully operable playlist.  Cassette currently ships with a provided operable playlist designed for operation with Discord.js.
+3. Make playlists. At its most basic level, cassette ships with a fully functional playlist (that is the entire point of this module, after all).  However, actually transmitting audio from that playlist is very implementation-specific; as such, you're welcome to extend the cassette playlist to make your own fully operable playlist. Cassette currently ships with a provided operable playlist designed for operation with Discord.js.
 
 ```js
 class PlayablePlaylist extends cassette.Playlist {
@@ -33,7 +33,7 @@ class PlayablePlaylist extends cassette.Playlist {
 }
 ```
 
-The client has a `playlists` property which will stay empty unless you manually fill it from your playlist extension.
+4. Store playlists. The client has a `playlists` property which will stay empty unless you manually fill it from your playlist extension. You can do this however you want, but the basic idea is that you store the playlist on creation and remove it once the playlist is destroyed.
 
 ## Playlist reference
 
@@ -69,3 +69,13 @@ The client has a `playlists` property which will stay empty unless you manually 
 - **pause()**: `void` pause playlist playback
 - **resume()**: `void` resume playlist playback
 - **start(channel: VoiceChannel)**: `Promise<void>` start playback in a channel
+
+#### example
+```js
+// some command
+const { DiscordPlaylist } = require('cassette');
+const playlist = DiscordPlaylist.get(cassetteClient, message.guild);
+
+await playlist.add(message.content);
+return playlist.start(message.member.voiceChannel);
+```
