@@ -11,7 +11,7 @@ import YouTubeSong from './external/youtube/Song';
 import SoundcloudService from './external/soundcloud/Service';
 import SoundcloudSong from './external/soundcloud/Song';
 
-import DiscordPlaylist from './players/DiscordPlaylist';
+import DiscordPlaylist from './extensions/DiscordPlaylist';
 
 export {
   Client,
