@@ -28,7 +28,7 @@ export default class YouTubeSong extends Song {
     });
   }
 
-  public async next() {
+  public async next(): Promise<null> {
     return null;
   }
 }

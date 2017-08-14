@@ -133,11 +133,11 @@ export default class SoundcloudService implements IService {
     });
   }
 
-  public formatSongs(songs: Track[], playlistID?: number) {
+  public formatSongs(songs: Track[], playlistID?: number): SoundcloudSong[] {
     return songs.filter((t) => t.streamable).map((t) => new SoundcloudSong(this, t, playlistID));
   }
 
-  public async fetch(fetchable: IFetchable, searchType?: SearchType) {
+  public async fetch(fetchable: IFetchable, searchType?: SearchType): Promise<SoundcloudSong[]> {
     const songs: SoundcloudSong[] = [];
 
     for (const resource of fetchable.playlists.concat(fetchable.songs)) {
@@ -176,7 +176,7 @@ export default class SoundcloudService implements IService {
     return songs;
   }
 
-  public fetchable(content: string) {
+  public fetchable(content: string): IFetchable {
     const words = content.split(' ');
     const fetchable: IFetchable = {
       playlists: [],

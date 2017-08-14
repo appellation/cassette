@@ -15,7 +15,7 @@ export default abstract class Song {
     this.service = service;
   }
 
-  public toggleLoop() {
+  public toggleLoop(): boolean {
     return this.loop = !this.loop;
   }
 

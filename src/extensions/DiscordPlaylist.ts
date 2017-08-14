@@ -33,43 +33,43 @@ export default class DiscordPlaylist extends Playlist {
     this.guild = guild;
   }
 
-  private get _dispatcher() {
+  private get _dispatcher(): StreamDispatcher | null {
     return this.guild.voiceConnection ? this.guild.voiceConnection.dispatcher : null;
   }
 
-  get playing() {
+  get playing(): boolean {
     return this._playing;
   }
 
-  public stop() {
+  public stop(): void {
     return this.end('temp');
   }
 
-  public destroy() {
+  public destroy(): void {
     this.end('terminal');
   }
 
-  public pause() {
+  public pause(): void {
     if (this._dispatcher) {
       this._dispatcher.pause();
       this.emit('pause');
     }
   }
 
-  public resume() {
+  public resume(): void {
     if (this._dispatcher) {
       this._dispatcher.resume();
       this.emit('resume');
     }
   }
 
-  public async start(channel: VoiceChannel) {
+  public async start(channel: VoiceChannel): Promise<void> {
     await DiscordPlaylist.ensureVoiceConnection(channel);
     await this._start();
     this.emit('start');
   }
 
-  private async _start() {
+  private async _start(): Promise<void> {
     if (!this.current) throw new Error('No song available to play.');
     if (!this.guild.voiceConnection) throw new Error('No voice connection to play audio on.');
 
@@ -91,14 +91,14 @@ export default class DiscordPlaylist extends Playlist {
     });
   }
 
-  private end(reason: EndReason = 'terminal') {
+  private end(reason: EndReason = 'terminal'): void {
     if (this._dispatcher) {
       this._dispatcher.end(reason);
       this.emit('end', reason);
     }
   }
 
-  private _destroy() {
+  private _destroy(): void {
     if (this.guild.voiceConnection) this.guild.voiceConnection.disconnect();
     this.client.playlists.delete(this.guild.id);
   }

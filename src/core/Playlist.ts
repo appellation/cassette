@@ -21,29 +21,29 @@ export default class Playlist extends EventEmitter {
     this.client = client;
   }
 
-  get length() {
+  get length(): number {
     return this.songs.length;
   }
 
-  get pos() {
+  get pos(): number {
     return this._pos;
   }
 
-  get current() {
+  get current(): Song {
     return this.songs[this._pos];
   }
 
-  public reset() {
+  public reset(): void {
     this.songs = [];
     this._pos = 0;
     this.emit('reset');
   }
 
-  public hasPrev() {
+  public hasPrev(): boolean {
     return this._pos > 0;
   }
 
-  public prev() {
+  public prev(): boolean {
     if (this.hasPrev()) {
       this._pos -= 1;
       this.emit('prev');
@@ -59,11 +59,11 @@ export default class Playlist extends EventEmitter {
     return false;
   }
 
-  public hasNext() {
+  public hasNext(): boolean {
     return this._pos < this.songs.length - 1;
   }
 
-  public async next() {
+  public async next(): Promise<boolean> {
     const complete = () => {
       this.emit('next');
       return true;
@@ -93,7 +93,7 @@ export default class Playlist extends EventEmitter {
     return false;
   }
 
-  public shuffle() {
+  public shuffle(): void {
     this.songs = knuthShuffle(this.songs);
     this._pos = 0;
     this.emit('shuffle');
@@ -102,7 +102,7 @@ export default class Playlist extends EventEmitter {
   public async add(content: string, {
     position = Infinity,
     searchType = 'song',
-  }: { position?: number, searchType?: SearchType } = {}) {
+  }: { position?: number, searchType?: SearchType } = {}): Promise<Song[]> {
     const added: Song[] = [];
 
     for (const service of this.client.services) {

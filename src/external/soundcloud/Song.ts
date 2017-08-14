@@ -27,7 +27,7 @@ export default class SoundcloudSong extends Song {
     return result.data;
   }
 
-  public async next() {
+  public async next(): Promise<null> {
     return null;
   }
 }

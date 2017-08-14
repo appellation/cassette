@@ -14,7 +14,7 @@ export default class YouTubeService implements IService {
     this.api = new API(key);
   }
 
-  public async fetch(fetchable: IFetchable, searchType?: SearchType) {
+  public async fetch(fetchable: IFetchable, searchType?: SearchType): Promise<YouTubeSong[]> {
     const fetched: YouTubeSong[] = [];
 
     for (const playlist of fetchable.playlists) {
@@ -46,7 +46,7 @@ export default class YouTubeService implements IService {
     return fetched;
   }
 
-  public fetchable(content: string) {
+  public fetchable(content: string): IFetchable {
     const words = content.split(' ');
     const query = [];
     const fetchable: IFetchable = {
