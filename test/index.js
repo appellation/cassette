@@ -27,8 +27,9 @@ test.serial('create playlist', t => {
 });
 
 test.serial('add to playlist', t => {
-  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A https://soundcloud.com/tom-stetson-905539972/sets/the-chill-pill')
-    .then(() => t.true(playlist.length > 200));
+  // https://soundcloud.com/tom-stetson-905539972/sets/the-chill-pill
+  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A')
+    .then(() => t.true(playlist.length > 100));
 });
 
 test.serial('shuffles', t => {
