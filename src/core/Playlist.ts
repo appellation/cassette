@@ -1,11 +1,21 @@
 import * as EventEmitter from 'events';
-import { knuthShuffle } from 'knuth-shuffle';
 
 import { IService } from '../interfaces/IService';
 import Client from './Client';
 import Song from './Song';
 
 export type SearchType = 'song' | 'playlist';
+
+export const shuffle = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
+  return array;
+};
 
 export default class Playlist extends EventEmitter {
   public client: Client;
@@ -94,7 +104,7 @@ export default class Playlist extends EventEmitter {
   }
 
   public shuffle(): void {
-    this.songs = knuthShuffle(this.songs);
+    this.songs = shuffle(this.songs);
     this._pos = 0;
     this.emit('shuffle');
   }

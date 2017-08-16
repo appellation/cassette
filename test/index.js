@@ -11,7 +11,7 @@ let services;
 test.serial('create services', t => {
   services = [
     new playlists.YouTubeService(process.env.GOOGLE_API_KEY),
-    new playlists.SoundcloudService(process.env.SOUNDCLOUD_API_KEY)
+    // new playlists.SoundcloudService(process.env.SOUNDCLOUD_API_KEY)
   ];
   return t.pass();
 });
