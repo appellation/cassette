@@ -1,5 +1,3 @@
-import * as EventEmitter from 'events';
-
 import { IService } from '../interfaces/IService';
 import Client from './Client';
 import Song from './Song';
@@ -17,10 +15,9 @@ export const shuffle = (array: any[]) => {
   return array;
 };
 
-export default class Playlist extends EventEmitter {
+export default class Playlist extends Array<Song> {
   public client: Client;
 
-  public songs: Song[] = [];
   public loop: boolean = false;
   public autoplay: boolean = false;
 
@@ -31,22 +28,17 @@ export default class Playlist extends EventEmitter {
     this.client = client;
   }
 
-  get length(): number {
-    return this.songs.length;
-  }
-
   get pos(): number {
     return this._pos;
   }
 
   get current(): Song {
-    return this.songs[this._pos];
+    return this[this._pos];
   }
 
   public reset(): void {
-    this.songs = [];
+    this.splice(0, this.length);
     this._pos = 0;
-    this.emit('reset');
   }
 
   public hasPrev(): boolean {
@@ -56,13 +48,11 @@ export default class Playlist extends EventEmitter {
   public prev(): boolean {
     if (this.hasPrev()) {
       this._pos -= 1;
-      this.emit('prev');
       return true;
     }
 
     if (this.loop) {
-      this._pos = this.songs.length - 1;
-      this.emit('prev');
+      this._pos = this.length - 1;
       return true;
     }
 
@@ -70,14 +60,11 @@ export default class Playlist extends EventEmitter {
   }
 
   public hasNext(): boolean {
-    return this._pos < this.songs.length - 1;
+    return this._pos < this.length - 1;
   }
 
   public async next(): Promise<boolean> {
-    const complete = () => {
-      this.emit('next');
-      return true;
-    };
+    const complete = () => true;
 
     if (this.current && this.current.loop) return complete();
 
@@ -94,7 +81,7 @@ export default class Playlist extends EventEmitter {
     if (this.autoplay) {
       const next = await this.current.next();
       if (next) {
-        this.songs.push(next);
+        this.push(next);
         this._pos += 1;
         return complete();
       }
@@ -104,9 +91,8 @@ export default class Playlist extends EventEmitter {
   }
 
   public shuffle(): void {
-    this.songs = shuffle(this.songs);
+    shuffle(this);
     this._pos = 0;
-    this.emit('shuffle');
   }
 
   public async add(content: string, {
@@ -120,8 +106,7 @@ export default class Playlist extends EventEmitter {
       added.push(...(await service.fetch(fetchable, searchType)));
     }
 
-    this.songs.splice(position, 0, ...added);
-    this.emit('add', added);
+    this.splice(position, 0, ...added);
     return added;
   }
 }

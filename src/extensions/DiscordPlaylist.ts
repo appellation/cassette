@@ -52,21 +52,18 @@ export default class DiscordPlaylist extends Playlist {
   public pause(): void {
     if (this._dispatcher) {
       this._dispatcher.pause();
-      this.emit('pause');
     }
   }
 
   public resume(): void {
     if (this._dispatcher) {
       this._dispatcher.resume();
-      this.emit('resume');
     }
   }
 
   public async start(channel: VoiceChannel): Promise<void> {
     await DiscordPlaylist.ensureVoiceConnection(channel);
     await this._start();
-    this.emit('start');
   }
 
   private async _start(): Promise<void> {
@@ -76,7 +73,6 @@ export default class DiscordPlaylist extends Playlist {
     this.stop();
     const dispatcher = this.guild.voiceConnection.playStream(await this.current.stream(), { volume: 0.2 });
     this._playing = true;
-    this.emit('playing');
 
     dispatcher.once('end', async (reason: EndReason | 'user') => {
       this._playing = false;
@@ -94,7 +90,6 @@ export default class DiscordPlaylist extends Playlist {
   private end(reason: EndReason = 'terminal'): void {
     if (this._dispatcher) {
       this._dispatcher.end(reason);
-      this.emit('end', reason);
     }
   }
 
