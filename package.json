@@ -27,7 +27,7 @@
   "dependencies": {},
   "optionalDependencies": {
     "axios": "^0.16.2",
-    "simple-youtube-api": "github:hypercoder2975/simple-youtube-api#appel-wip",
+    "simple-youtube-api": "^3.0.0",
     "ytdl-core": "^0.14.4"
   }
 }
