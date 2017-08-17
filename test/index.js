@@ -33,11 +33,11 @@ test.serial('add to playlist', t => {
 });
 
 test.serial('shuffles', t => {
-  if (playlist.songs.length < 2) return t.pass();
+  if (playlist.length < 2) return t.pass();
 
-  const before = playlist.songs.slice();
+  const before = playlist.slice();
   playlist.shuffle();
-  return t.not(before, playlist.songs);
+  return t.not(before, playlist);
 });
 
 test.serial('advances', t => {
@@ -46,7 +46,7 @@ test.serial('advances', t => {
 
   return playlist.next().then(r => {
     t.true(r);
-    t.deepEqual(playlist.songs[before], song);
+    t.deepEqual(playlist[before], song);
     return t.is(before + 1, playlist.pos);
   });
 });
@@ -56,12 +56,12 @@ test.serial('reverses', t => {
   const song = playlist.current;
 
   t.true(playlist.prev());
-  t.deepEqual(playlist.songs[playlist.pos + 1], song);
+  t.deepEqual(playlist[playlist.pos + 1], song);
   return t.is(before - 1, playlist.pos);
 });
 
 test.serial('resets', t => {
   playlist.reset();
-  t.is(0, playlist.songs.length);
+  t.is(0, playlist.length);
   return t.is(0, playlist.pos);
 });
