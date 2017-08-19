@@ -35,14 +35,14 @@ class PlayablePlaylist extends cassette.Playlist {
 
 4. Store playlists. The client has a `playlists` property which will stay empty unless you manually fill it from your playlist extension. You can do this however you want, but the basic idea is that you store the playlist on creation and remove it once the playlist is destroyed.
 
-## Playlist reference
+## Reference
+
+### Playlist *extends `Array`*
 
 - **`constructor(client: Client)`**
 
-- **songs**: `Song[]` an array of songs in the playlist
 - **loop**: `boolean` whether to loop the playlist at extremeties
 - **autoplay**: `boolean` whether to use the last song to find the next song when at the end of the playlist
-- **length**: `number` *(readonly)* the length of the playlist
 - **pos**: `number` *(readonly)* the current 0-based position of the playlist
 - **current**: `Song?` *(readonly)* the current
 
@@ -54,7 +54,7 @@ class PlayablePlaylist extends cassette.Playlist {
 - **shuffle()**: `void` shuffle the playlist
 - **add(content: string, options: { position?: number, searchType?: 'song' | 'playlist' })**: `Promise<Song[]>` add content to the playlist using client services
 
-### Discord extension
+### DiscordPlaylist *extends `Playlist`*
 
 - *static* **get(client: Client, guild: Guild)**: `DiscordPlaylist` get or make a playlist for a guild. `client` is the cassette client, not the discord.js client.
 - *static* **ensureVoiceConnection(channel: VoiceChannel)**: `Promise<VoiceConnection>` ensure a voice connection.
