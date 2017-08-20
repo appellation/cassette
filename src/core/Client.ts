@@ -1,5 +1,4 @@
 import { IService } from '../interfaces/IService';
-// import Playable from './Playable';
 import Playlist from './Playlist';
 
 export default class Client {

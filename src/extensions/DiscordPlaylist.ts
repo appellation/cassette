@@ -4,6 +4,8 @@ import Client from '../core/Client';
 import Playlist from '../core/Playlist';
 import Song from '../core/Song';
 
+import Error, { Code } from './CassetteError';
+
 export type EndReason = 'temp' | 'terminal';
 
 export default class DiscordPlaylist extends Playlist {
@@ -19,9 +21,9 @@ export default class DiscordPlaylist extends Playlist {
   public static ensureVoiceConnection(channel: VoiceChannel): Promise<VoiceConnection> {
     if (channel.connection) return Promise.resolve(channel.connection);
 
-    if (!channel) throw new Error('You\'re not in a voice channel.');
-    if (!channel.joinable) throw new Error('I can\'t join your voice channel.');
-    if (!channel.speakable) throw new Error('I can\'t speak in your voice channel.');
+    if (!channel) throw new Error(Code.NO_VOICE_CHANNEL);
+    if (!channel.joinable) throw new Error(Code.NOT_JOINABLE);
+    if (!channel.speakable) throw new Error(Code.NOT_SPEAKABLE);
     return channel.join();
   }
 
@@ -46,19 +48,15 @@ export default class DiscordPlaylist extends Playlist {
   }
 
   public destroy(): void {
-    this.end('terminal');
+    return this.end('terminal');
   }
 
   public pause(): void {
-    if (this._dispatcher) {
-      this._dispatcher.pause();
-    }
+    if (this._dispatcher) this._dispatcher.pause();
   }
 
   public resume(): void {
-    if (this._dispatcher) {
-      this._dispatcher.resume();
-    }
+    if (this._dispatcher) this._dispatcher.resume();
   }
 
   public async start(channel: VoiceChannel): Promise<void> {
@@ -67,8 +65,8 @@ export default class DiscordPlaylist extends Playlist {
   }
 
   private async _start(): Promise<void> {
-    if (!this.current) throw new Error('No song available to play.');
-    if (!this.guild.voiceConnection) throw new Error('No voice connection to play audio on.');
+    if (!this.current) throw new Error(Code.NO_CURRENT_SONG);
+    if (!this.guild.voiceConnection) throw new Error(Code.NO_VOICE_CONNECTION);
 
     this.stop();
     const dispatcher = this.guild.voiceConnection.playStream(await this.current.stream(), { volume: 0.2 });
@@ -88,9 +86,7 @@ export default class DiscordPlaylist extends Playlist {
   }
 
   private end(reason: EndReason = 'terminal'): void {
-    if (this._dispatcher) {
-      this._dispatcher.end(reason);
-    }
+    if (this._dispatcher) this._dispatcher.end(reason);
   }
 
   private _destroy(): void {

@@ -4,17 +4,6 @@ import Song from './Song';
 
 export type SearchType = 'song' | 'playlist';
 
-export const shuffle = (array: any[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-
-  return array;
-};
-
 export default class Playlist extends Array<Song> {
   public client: Client;
 
@@ -64,18 +53,16 @@ export default class Playlist extends Array<Song> {
   }
 
   public async next(): Promise<boolean> {
-    const complete = () => true;
-
-    if (this.current && this.current.loop) return complete();
+    if (this.current && this.current.loop) return true;
 
     if (this.hasNext()) {
       this._pos += 1;
-      return complete();
+      return true;
     }
 
     if (this.loop) {
       this._pos = 0;
-      return complete();
+      return true;
     }
 
     if (this.autoplay) {
@@ -83,16 +70,22 @@ export default class Playlist extends Array<Song> {
       if (next) {
         this.push(next);
         this._pos += 1;
-        return complete();
+        return true;
       }
     }
 
     return false;
   }
 
-  public shuffle(): void {
-    shuffle(this);
-    this._pos = 0;
+  public shuffle() {
+    for (let i = this.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = this[i];
+      this[i] = this[j];
+      this[j] = temp;
+    }
+
+    return this;
   }
 
   public async add(content: string, {
