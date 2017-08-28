@@ -22,7 +22,7 @@ export default class YouTubeSong extends Song {
   }
 
   public stream(): ReadableStream {
-    return ytdl(this.streamURL, {
+    return ytdl(encodeURI(this.streamURL), {
       filter: 'audioonly',
       quality: 'lowest',
     });
