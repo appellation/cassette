@@ -1,21 +1,13 @@
 import { IService } from '../interfaces/IService';
-import Client from './Client';
 import Song from './Song';
 
 export type SearchType = 'song' | 'playlist';
 
 export default class Playlist extends Array<Song> {
-  public client: Client;
-
   public loop: boolean = false;
   public autoplay: boolean = false;
 
   private _pos: number = 0;
-
-  constructor(client: Client) {
-    super();
-    this.client = client;
-  }
 
   get pos(): number {
     return this._pos;
@@ -88,13 +80,13 @@ export default class Playlist extends Array<Song> {
     return this;
   }
 
-  public async add(content: string, {
+  public async add(content: string, services: IService[], {
     position = Infinity,
     searchType = 'song',
   }: { position?: number, searchType?: SearchType } = {}): Promise<Song[]> {
     const added: Song[] = [];
 
-    for (const service of this.client.services) {
+    for (const service of services) {
       const fetchable = service.fetchable(content);
       added.push(...(await service.fetch(fetchable, searchType)));
     }

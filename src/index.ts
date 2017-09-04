@@ -1,7 +1,6 @@
 export * from './interfaces/IFetchable';
 export * from './interfaces/IService';
 
-import Client from './core/Client';
 import Playlist from './core/Playlist';
 import Song from './core/Song';
 
@@ -11,10 +10,7 @@ import YouTubeSong from './external/youtube/Song';
 import SoundcloudService from './external/soundcloud/Service';
 import SoundcloudSong from './external/soundcloud/Song';
 
-import DiscordPlaylist from './extensions/DiscordPlaylist';
-
 export {
-  Client,
   Playlist,
   Song,
 
@@ -23,6 +19,4 @@ export {
 
   SoundcloudService,
   SoundcloudSong,
-
-  DiscordPlaylist,
 };
