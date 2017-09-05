@@ -1,6 +1,7 @@
 import { Readable as ReadableStream } from 'stream';
 import Song from '../../core/Song';
-import SoundcloudService, { Track } from './Service';
+import { Track } from '../../typings/Soundcloud';
+import SoundcloudService from './Service';
 
 export default class SoundcloudSong extends Song {
   public readonly type = 'soundcloud';

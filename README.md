@@ -54,28 +54,12 @@ class PlayablePlaylist extends cassette.Playlist {
 - **shuffle()**: `void` shuffle the playlist
 - **add(content: string, options: { position?: number, searchType?: 'song' | 'playlist' })**: `Promise<Song[]>` add content to the playlist using client services
 
-### DiscordPlaylist *extends `Playlist`*
+### Song
+- **`constructor(service: IService)`**
 
-- *static* **get(client: Client, guild: Guild)**: `DiscordPlaylist` get or make a playlist for a guild. `client` is the cassette client, not the discord.js client.
-- *static* **ensureVoiceConnection(channel: VoiceChannel)**: `Promise<VoiceConnection>` ensure a voice connection.
-
-- **`constructor(client: Client, guild: Guild)`**
-
-- **guild**: `Guild` *(readonly)* the guild for this playlist
-- **playing**: `boolean` *(readonly)* whether the playlist is currently playing
-
-- **stop()**: `void` temporarily stop the playlist without destroying it
-- **destroy()**: `void` stop the playlist and destroy it
-- **pause()**: `void` pause playlist playback
-- **resume()**: `void` resume playlist playback
-- **start(channel: VoiceChannel)**: `Promise<void>` start playback in a channel
-
-#### example
-```js
-// some command
-const { DiscordPlaylist } = require('cassette');
-const playlist = DiscordPlaylist.get(cassetteClient, message.guild);
-
-await playlist.add(message.content);
-return playlist.start(message.member.voiceChannel);
-```
+- **service**: `IService` *(readonly)* the service that loaded this song
+- **type**: `string` *(abstract, readonly)* the type of the song, based on the service
+- **title**: `string` *(abstract, readonly)* the title of the song
+- **trackID**: `string | number` *(abstract, readonly)* the ID of the song, relative to the service
+- **playlistID?**: `string | number` *(abstract, readonly)* the ID of the playlist this song came from, if any, relative to the service
+- **streamURL**: `string` *(abstract, readonly)* the URL to stream audio from
