@@ -11,29 +11,25 @@ Assume `cassette` is imported like so:
 const cassette = require('cassette');
 ```
 
-1. Create some services. Cassette ships with several, but you can always make your own by implementing `IService`.
+1. Create a playlist.  That's what we're here for, after all.
+
+```js
+const playlist = new cassette.Playlist();
+```
+
+2. Create some services. Cassette ships with several, but you can always make your own by implementing `IService`.
 
 ```js
 const ytService = new cassette.YouTubeService('your api key');
 ```
 
-2. Create a client using your services.
+3. Add some stuff to this new playlist.
 
 ```js
-const client = new cassette.Client([ytService]);
+playlist.add('some awesome song', [ytService]);
 ```
 
-3. Make playlists. At its most basic level, cassette ships with a fully functional playlist (that is the entire point of this module, after all).  However, actually transmitting audio from that playlist is very implementation-specific; as such, you're welcome to extend the cassette playlist to make your own fully operable playlist. Cassette currently ships with a provided operable playlist designed for operation with Discord.js.
-
-```js
-class PlayablePlaylist extends cassette.Playlist {
-  start() {
-    (await this.current.stream()).pipe(out);
-  }
-}
-```
-
-4. Store playlists. The client has a `playlists` property which will stay empty unless you manually fill it from your playlist extension. You can do this however you want, but the basic idea is that you store the playlist on creation and remove it once the playlist is destroyed.
+4. Profit.
 
 ## Reference
 
@@ -52,7 +48,7 @@ class PlayablePlaylist extends cassette.Playlist {
 - **hasNext()**: `boolean` whether the playlist is not at the last position
 - **next()**: `Promise<boolean>` advance the playlist and return whether it was successful
 - **shuffle()**: `void` shuffle the playlist
-- **add(content: string, options: { position?: number, searchType?: 'song' | 'playlist' })**: `Promise<Song[]>` add content to the playlist using client services
+- **add(content: string, services: IService[], options: { position?: number, searchType?: 'song' | 'playlist' })**: `Promise<Song[]>` add content to the playlist
 
 ### Song
 - **`constructor(service: IService)`**
