@@ -16,20 +16,19 @@ test.serial('create services', t => {
   return t.pass();
 });
 
-test.serial('create client', t => {
-  client = new playlists.Client(services);
-  return t.pass();
-});
-
 test.serial('create playlist', t => {
   playlist = new playlists.Playlist(client);
   return t.pass();
 });
 
-test.serial('add to playlist', t => {
+test.serial('add youtube video URLs to playlist', t => {
   // https://soundcloud.com/tom-stetson-905539972/sets/the-chill-pill
-  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A')
+  return playlist.add('https://www.youtube.com/watch?v=OVMuwa-HRCQ https://www.youtube.com/watch?v=MwSkC85TDgY https://www.youtube.com/playlist?list=PLF5C76212C58C464A', services)
     .then(() => t.true(playlist.length > 100));
+});
+
+test.serial('add livestream to playlist', t => {
+  return playlist.add('https://www.youtube.com/watch?v=ueupsBPNkSc', services).then(() => t.pass());
 });
 
 test.serial('shuffles', t => {
