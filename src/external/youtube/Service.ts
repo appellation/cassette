@@ -19,6 +19,7 @@ export default class YouTubeService implements IService {
 
     for (const playlist of fetchable.playlists) {
       const p = await this.api.getPlaylistByID(playlist);
+      if (!p) continue;
       await p.getVideos();
       fetched.push(...p.videos.map((v) => new YouTubeSong(this, v, playlist)));
     }
