@@ -25,7 +25,8 @@ export default class YouTubeService implements IService {
     }
 
     for (const song of fetchable.songs) {
-      fetched.push(new YouTubeSong(this, await this.api.getVideoByID(song)));
+      const video = await this.api.getVideoByID(song);
+      if (video) fetched.push(new YouTubeSong(this, video));
     }
 
     if (this.search) {
