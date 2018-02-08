@@ -28,6 +28,6 @@
   "optionalDependencies": {
     "axios": "^0.16.2",
     "simple-youtube-api": "^4.0.0",
-    "ytdl-core": "^0.14.4"
+    "ytdl-core": "^0.20.1"
   }
 }
